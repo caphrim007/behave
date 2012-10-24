@@ -352,6 +352,11 @@ class Scenario(TagStatement, Replayable):
 
        The name of the scenario (the text after "Scenario:".)
 
+    .. attribute:: description
+
+       The description of the scenario as seen in the *feature file*. This is
+       stored as a list of text lines.
+
     .. attribute:: feature
 
        The :class:`~behave.model.Feature` this scenario belongs to.
@@ -399,9 +404,9 @@ class Scenario(TagStatement, Replayable):
     '''
     type = "scenario"
 
-    # XXX-JE-ORIG: def __init__(self, filename, line, keyword, name, tags=[], steps=[]):
-    def __init__(self, filename, line, keyword, name, tags=None, steps=None):
+    def __init__(self, filename, line, keyword, name, tags=None, description=None, steps=None):
         super(Scenario, self).__init__(filename, line, keyword, name, tags)
+        self.description = description or []
         self.steps = steps or []
         self.background = None
         self.feature = None  # REFER-TO: owner=Feature
