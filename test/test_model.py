@@ -54,6 +54,7 @@ class TestFeatureRun(unittest.TestCase):
             scenario.run.return_value = False
 
         self.config.tags.check.return_value = True
+        self.config.name = []
 
         feature = model.Feature('foo.feature', 1, u'Feature', u'foo',
                                 scenarios=scenarios)
