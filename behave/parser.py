@@ -144,8 +144,7 @@ class Parser(object):
             name = line[len(background_kwd) + 1:].strip()
             self.statement = model.Background(self.filename, self.line,
                                               background_kwd, name)
-            self.feature.background = self.statement
-            self.state = 'steps'
+            self.state = 'background'
             return True
 
         scenario_kwd = self.match_keyword('scenario', line)
@@ -168,6 +167,19 @@ class Parser(object):
             return True
 
         self.feature.description.append(line)
+        return True
+
+    def action_background(self, line):
+        line = line.strip()
+
+        step = self.parse_step(line)
+        if step:
+            self.feature.background = self.statement
+            self.state = 'steps'
+            self.statement.steps.append(step)
+            return True
+
+        self.statement.description.append(line)
         return True
 
     def action_scenario(self, line):
