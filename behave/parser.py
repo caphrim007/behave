@@ -4,6 +4,8 @@ from __future__ import with_statement
 
 from behave import model, i18n
 
+import re
+
 DEFAULT_LANGUAGE = 'en'
 
 
@@ -261,6 +263,9 @@ class Parser(object):
         return True
 
     def action_table(self, line):
+        import sys
+
+        pattern = re.compile('/(?<!\\\)\|/')
         line = line.strip()
 
         if not line.startswith('|'):
@@ -276,7 +281,15 @@ class Parser(object):
             self.state = 'steps'
             return self.action_steps(line)
 
-        cells = [cell.strip() for cell in line.split('|')[1:-1]]
+        # Remove leading and trailing pipe characters
+        #
+        #   | cell one | cell two | cell three |
+        #
+        # becomes
+        #   cell one | cell two | cell three
+        line = line[1:-1].strip()
+        cells = [cell.replace("\\|", '|').strip() for cell in pattern.split(line)]
+
         if self.table is None:
             self.table = model.Table(cells, self.line)
         else:
