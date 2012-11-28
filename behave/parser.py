@@ -277,7 +277,7 @@ class Parser(object):
     def action_table(self, line):
         import sys
 
-        pattern = re.compile('/(?<!\\\)\|/')
+        pattern = re.compile('(?<!\\\)\|')
         line = line.strip()
 
         if not line.startswith('|'):
@@ -300,7 +300,7 @@ class Parser(object):
         # becomes
         #   cell one | cell two | cell three
         line = line[1:-1].strip()
-        cells = [cell.replace("\\|", '|').strip() for cell in pattern.split(line)]
+        cells = [cell.replace('\\|', '|').strip() for cell in pattern.split(line)]
 
         if self.table is None:
             self.table = model.Table(cells, self.line)
